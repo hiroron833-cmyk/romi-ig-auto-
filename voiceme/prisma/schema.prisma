@@ -1,0 +1,76 @@
+// Future backend schema (not connected in the MVP).
+// The MVP persists everything in the browser via localStorage
+// (see src/lib/store). This schema is the intended shape once
+// login, paid coaching, and affiliate tracking are added.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  createdAt     DateTime       @default(now())
+  plan          Plan           @default(FREE)
+  concerns      String[]
+  goals         String[]
+  recordings    Recording[]
+  productClicks ProductClick[]
+}
+
+enum Plan {
+  FREE
+  COACH
+  PREMIUM
+}
+
+model Recording {
+  id            String     @id @default(cuid())
+  userId        String
+  user          User       @relation(fields: [userId], references: [id])
+  createdAt     DateTime   @default(now())
+  durationSec   Int
+  audioUrl      String? // null once the user deletes the source audio
+  audioDeleted  Boolean    @default(false)
+  analyses      Analysis[]
+  lessonId      String?
+  lessonDoneAt  DateTime?
+}
+
+model Analysis {
+  id                   String    @id @default(cuid())
+  recordingId          String
+  recording            Recording @relation(fields: [recordingId], references: [id])
+  kind                 AnalysisKind
+  speedScore           Int
+  volumeScore          Int
+  clarityScore         Int
+  articulationScore    Int
+  pauseScore           Int
+  intonationScore      Int
+  stabilityScore       Int
+  listenabilityScore   Int
+  strengths            String[]
+  improvements         String[]
+  todayPoint           String
+  recommendedLessonId  String
+  createdAt            DateTime  @default(now())
+}
+
+enum AnalysisKind {
+  BEFORE
+  AFTER
+}
+
+model ProductClick {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  clickedAt DateTime @default(now())
+}

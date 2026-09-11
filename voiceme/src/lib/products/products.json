@@ -1,0 +1,90 @@
+[
+  {
+    "id": "smartphone-mic-01",
+    "category": "スマホ用マイク",
+    "name": "クリップ式スマホ用マイク",
+    "description": "録音時の音割れを抑え、自分の声をよりクリアに録れます。",
+    "imageEmoji": "🎤",
+    "price": "¥2,980〜",
+    "affiliateUrl": "https://example.com/affiliate/smartphone-mic",
+    "matchesConcerns": ["muffled", "small_voice"],
+    "matchesGoals": ["voice_broadcast"]
+  },
+  {
+    "id": "usb-mic-01",
+    "category": "USBマイク",
+    "name": "配信向けUSBコンデンサーマイク",
+    "description": "音声配信やオンライン面接での聞き取りやすさをサポートします。",
+    "imageEmoji": "🎙️",
+    "price": "¥7,980〜",
+    "affiliateUrl": "https://example.com/affiliate/usb-mic",
+    "matchesConcerns": ["muffled", "often_asked_to_repeat"],
+    "matchesGoals": ["voice_broadcast", "interview"]
+  },
+  {
+    "id": "throat-care-01",
+    "category": "喉ケア用品",
+    "name": "のど飴・喉ケアセット",
+    "description": "話す機会が多い日も、喉のコンディションを整えやすくします。",
+    "imageEmoji": "🍯",
+    "price": "¥890〜",
+    "affiliateUrl": "https://example.com/affiliate/throat-care",
+    "matchesConcerns": ["small_voice", "muffled"],
+    "matchesGoals": ["customer_service", "presentation"]
+  },
+  {
+    "id": "humidifier-01",
+    "category": "加湿器",
+    "name": "卓上USB加湿器",
+    "description": "乾燥による声のこもりが気になる方向けのコンパクト加湿器です。",
+    "imageEmoji": "💧",
+    "price": "¥3,480〜",
+    "affiliateUrl": "https://example.com/affiliate/humidifier",
+    "matchesConcerns": ["muffled"],
+    "matchesGoals": []
+  },
+  {
+    "id": "speech-textbook-01",
+    "category": "話し方教材",
+    "name": "伝わる話し方トレーニングブック",
+    "description": "抑揚・間の取り方など、今日のレッスンをさらに深められる教材です。",
+    "imageEmoji": "📘",
+    "price": "¥1,650〜",
+    "affiliateUrl": "https://example.com/affiliate/speech-textbook",
+    "matchesConcerns": ["flat_intonation", "poor_articulation", "lack_confidence"],
+    "matchesGoals": ["presentation", "elegant_intelligent"]
+  },
+  {
+    "id": "online-course-01",
+    "category": "オンライン講座",
+    "name": "CA式・伝わる話し方オンライン講座",
+    "description": "接客やビジネスシーンで信頼感を与える話し方を体系的に学べます。",
+    "imageEmoji": "🎓",
+    "price": "¥9,800〜",
+    "affiliateUrl": "https://example.com/affiliate/online-course",
+    "matchesConcerns": ["nervous_in_public", "lack_confidence"],
+    "matchesGoals": ["customer_service", "trustworthy", "interview"]
+  },
+  {
+    "id": "earphone-01",
+    "category": "イヤホン",
+    "name": "自分の声モニタリング用イヤホン",
+    "description": "録音を聞き返す練習をより快適に行えます。",
+    "imageEmoji": "🎧",
+    "price": "¥4,980〜",
+    "affiliateUrl": "https://example.com/affiliate/earphone",
+    "matchesConcerns": ["dislike_own_voice"],
+    "matchesGoals": []
+  },
+  {
+    "id": "voice-recorder-01",
+    "category": "ボイスレコーダー",
+    "name": "高音質ICボイスレコーダー",
+    "description": "面接やプレゼンの練習を、外出先でも手軽に記録できます。",
+    "imageEmoji": "📼",
+    "price": "¥5,980〜",
+    "affiliateUrl": "https://example.com/affiliate/voice-recorder",
+    "matchesConcerns": ["often_asked_to_repeat"],
+    "matchesGoals": ["interview", "presentation"]
+  }
+]
