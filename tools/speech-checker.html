@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>話し方・声のコンプレックス解消チェッカー</title>
+  <style>
+    :root {
+      --primary-color: #4A90E2;
+      --bg-color: #F5F7FA;
+      --card-bg: #FFFFFF;
+      --text-color: #333333;
+    }
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    h1 {
+      font-size: 1.5rem;
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+    }
+    p.desc {
+      font-size: 0.9rem;
+      text-align: center;
+      color: #666;
+      margin-bottom: 24px;
+    }
+    .btn-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 32px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:disabled { background-color: #CCC; }
+    button.recording { background-color: #E74C3C; }
+    .status {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #888;
+      height: 20px;
+    }
+    .result-card {
+      background: #F9FAFB;
+      border: 1px solid #E5E7EB;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 20px;
+      display: none;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .metric-box {
+      background: #FFF;
+      padding: 12px 8px;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .metric-value {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    .metric-label { font-size: 0.75rem; color: #666; }
+    .transcript-box {
+      background: #FFF;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: #555;
+      max-height: 100px;
+      overflow-y: auto;
+      border: 1px solid #EEE;
+      margin-bottom: 16px;
+    }
+    /* アフィリエイト枠 */
+    .affiliate-section {
+      margin-top: 24px;
+      border-top: 2px dashed #E5E7EB;
+      padding-top: 16px;
+    }
+    .affiliate-title {
+      font-size: 0.95rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+    .affiliate-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #FFF;
+      border: 1px solid #DDD;
+      border-radius: 8px;
+      padding: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s;
+    }
+    .affiliate-card:hover { transform: translateY(-2px); }
+    .affiliate-img { width: 60px; height: 60px; background: #EEE; border-radius: 4px; flex-shrink: 0; }
+    .affiliate-info { font-size: 0.85rem; }
+    .affiliate-info strong { display: block; color: var(--primary-color); margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>話し方診断ツール</h1>
+  <p class="desc">マイクに向かって10〜30秒ほど話してみてください。<br>話すスピードやフィラー（えー、あの）を分析します。</p>
+
+  <div class="btn-container">
+    <button id="toggleBtn">録音開始</button>
+  </div>
+  <div class="status" id="statusText">待機中</div>
+
+  <div class="result-card" id="resultCard">
+    <div class="metrics">
+      <div class="metric-box">
+        <div class="metric-value" id="wpmVal">0</div>
+        <div class="metric-label">話速 (文字/分)</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-value" id="fillerVal">0</div>
+        <div class="metric-label">フィラー回数</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-value" id="durationVal">0s</div>
+        <div class="metric-label">計測時間</div>
+      </div>
+    </div>
+
+    <div class="transcript-box" id="transcriptText">（文字起こし結果がここに表示されます）</div>
+
+    <div class="advice" id="adviceText" style="font-size: 0.9rem; font-weight: bold; color: #333;"></div>
+
+    <!-- アフィリエイト枠 -->
+    <div class="affiliate-section">
+      <div class="affiliate-title">💡 あなたにおすすめの改善アイテム</div>
+      <!-- ※実際の運用時は href をご自身のアフィリエイトリンクに差し替えます -->
+      <a href="https://example.com/affiliate-link" target="_blank" class="affiliate-card">
+        <div class="affiliate-img" style="background:#e0f2fe; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">🎤</div>
+        <div class="affiliate-info">
+          <strong>防音・音質改善マイク / ボイトレ本</strong>
+          <span id="affiliateDesc">あなたの話し方に合わせたトレーニング教材や便利グッズ</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const toggleBtn = document.getElementById('toggleBtn');
+  const statusText = document.getElementById('statusText');
+  const resultCard = document.getElementById('resultCard');
+  const wpmVal = document.getElementById('wpmVal');
+  const fillerVal = document.getElementById('fillerVal');
+  const durationVal = document.getElementById('durationVal');
+  const transcriptText = document.getElementById('transcriptText');
+  const adviceText = document.getElementById('adviceText');
+  const affiliateDesc = document.getElementById('affiliateDesc');
+
+  let isRecording = false;
+  let recognition = null;
+  let startTime = 0;
+  let finalTranscript = '';
+
+  // Web Speech API の初期化
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    statusText.innerText = 'お使いのブラウザは音声認識に対応していません。（Chrome推奨）';
+    toggleBtn.disabled = true;
+  } else {
+    recognition = new SpeechRecognition();
+    recognition.lang = 'ja-JP';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onresult = (event) => {
+      let interimTranscript = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+        } else {
+          interimTranscript += event.results[i][0].transcript;
+        }
+      }
+      transcriptText.innerText = finalTranscript + interimTranscript;
+    };
+
+    recognition.onerror = (event) => {
+      console.error(event.error);
+      statusText.innerText = 'エラーが発生しました: ' + event.error;
+    };
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    if (!isRecording) {
+      // 録音開始
+      finalTranscript = '';
+      transcriptText.innerText = '';
+      startTime = Date.now();
+      recognition.start();
+      isRecording = true;
+      toggleBtn.innerText = '計測終了';
+      toggleBtn.classList.add('recording');
+      statusText.innerText = '音声を取得中... 話しかけてください';
+      resultCard.style.display = 'none';
+    } else {
+      // 録音終了
+      recognition.stop();
+      isRecording = false;
+      toggleBtn.innerText = '録音開始';
+      toggleBtn.classList.remove('recording');
+      statusText.innerText = '分析が完了しました';
+
+      setTimeout(analyzeSpeech, 500); // 認識完了を少し待ってから分析
+    }
+  });
+
+  // 話し方分析ロジック
+  function analyzeSpeech() {
+    const endTime = Date.now();
+    const durationSec = Math.max(1, Math.round((endTime - startTime) / 1000));
+    const text = finalTranscript;
+
+    // 1. 文字数・WPM計算
+    const charCount = text.length;
+    const wpm = Math.round((charCount / durationSec) * 60);
+
+    // 2. フィラー検知（えー、あの、その、えっと 等）
+    const fillerRegex = /(えー|あの|その|えっと|まあ|んー)/g;
+    const matches = text.match(fillerRegex);
+    const fillerCount = matches ? matches.length : 0;
+
+    // 3. 結果表示
+    wpmVal.innerText = wpm;
+    fillerVal.innerText = fillerCount;
+    durationVal.innerText = durationSec + '秒';
+
+    // 4. アドバイス判定 & アフィリエイト訴求の最適化
+    let advice = '';
+    if (wpm > 380) {
+      advice = '少し早口気味です。意識して「間」を取りながら話してみましょう。';
+      affiliateDesc.innerText = '早口・滑舌改善におすすめの話し方トレーニング本';
+    } else if (wpm < 220 && charCount > 0) {
+      advice = 'ゆっくり丁寧なテンポです。抑揚をつけるとさらに聞きやすくなります。';
+      affiliateDesc.innerText = '表現力を高めるボイスレコーダー＆発声レッスン';
+    } else if (charCount === 0) {
+      advice = '音声がうまく聞き取れませんでした。マイクの距離や環境を確認してください。';
+      affiliateDesc.innerText = 'ノイズキャンセリング対応の高品質USBマイク';
+    } else {
+      advice = '聞き取りやすいとても適切なスピードです！';
+      affiliateDesc.innerText = 'さらに声に磨きをかけるためのプロ監修ボイトレグッズ';
+    }
+
+    if (fillerCount >= 3) {
+      advice += ` また、「${matches[0]}」などの言い淀みが少し目立ちます。`;
+    }
+
+    adviceText.innerText = advice;
+    resultCard.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
